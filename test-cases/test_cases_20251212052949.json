@@ -1,0 +1,102 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+
+# Initialize WebDriver
+driver = webdriver.Chrome()
+
+try:
+    # Test Case TC001: Access Login Page from Main Screen
+    driver.get("https://example.com")  # Replace with the actual main screen URL
+    login_button = driver.find_element(By.LINK_TEXT, "Login")  # Adjust selector as needed
+    login_button.click()
+    assert "Login" in driver.title  # Replace with the actual title of the login page
+
+    # Test Case TC002: Successful Login with Valid Credentials
+    driver.get("https://example.com/login")  # Replace with the actual login page URL
+    email_field = driver.find_element(By.ID, "email")  # Adjust selector as needed
+    password_field = driver.find_element(By.ID, "password")  # Adjust selector as needed
+    login_button = driver.find_element(By.ID, "loginButton")  # Adjust selector as needed
+    email_field.send_keys("valid_user@example.com")  # Replace with valid test email
+    password_field.send_keys("valid_password")  # Replace with valid test password
+    login_button.click()
+    assert "Dashboard" in driver.title  # Replace with the actual title of the dashboard/home page
+
+    # Test Case TC003: Login with Invalid Credentials
+    driver.get("https://example.com/login")
+    email_field = driver.find_element(By.ID, "email")
+    password_field = driver.find_element(By.ID, "password")
+    login_button = driver.find_element(By.ID, "loginButton")
+    email_field.send_keys("valid_user@example.com")
+    password_field.send_keys("invalid_password")
+    login_button.click()
+    error_message = driver.find_element(By.ID, "errorMessage")  # Adjust selector as needed
+    assert "Invalid credentials" in error_message.text
+
+    # Test Case TC004: Login with Missing Email/Username
+    driver.get("https://example.com/login")
+    password_field = driver.find_element(By.ID, "password")
+    login_button = driver.find_element(By.ID, "loginButton")
+    password_field.send_keys("valid_password")
+    login_button.click()
+    email_error_message = driver.find_element(By.ID, "emailErrorMessage")  # Adjust selector as needed
+    assert "Email is required" in email_error_message.text
+
+    # Test Case TC005: Login with Missing Password
+    driver.get("https://example.com/login")
+    email_field = driver.find_element(By.ID, "email")
+    login_button = driver.find_element(By.ID, "loginButton")
+    email_field.send_keys("valid_user@example.com")
+    login_button.click()
+    password_error_message = driver.find_element(By.ID, "passwordErrorMessage")  # Adjust selector as needed
+    assert "Password is required" in password_error_message.text
+
+    # Test Case TC006: Password Field Masking Verification
+    driver.get("https://example.com/login")
+    password_field = driver.find_element(By.ID, "password")
+    password_field.send_keys("test_password")
+    assert password_field.get_attribute("type") == "password"
+
+    # Test Case TC007: Forgot Password Link Functionality
+    driver.get("https://example.com/login")
+    forgot_password_link = driver.find_element(By.LINK_TEXT, "Forgot Password")  # Adjust selector as needed
+    forgot_password_link.click()
+    assert "Forgot Password" in driver.title  # Replace with the actual title of the forgot password page
+
+    # Test Case TC008: Remember Me Option Functionality
+    driver.get("https://example.com/login")
+    email_field = driver.find_element(By.ID, "email")
+    password_field = driver.find_element(By.ID, "password")
+    remember_me_checkbox = driver.find_element(By.ID, "rememberMe")  # Adjust selector as needed
+    login_button = driver.find_element(By.ID, "loginButton")
+    email_field.send_keys("valid_user@example.com")
+    password_field.send_keys("valid_password")
+    remember_me_checkbox.click()
+    login_button.click()
+    driver.quit()
+    driver = webdriver.Chrome()
+    driver.get("https://example.com/login")
+    assert "valid_user@example.com" in driver.find_element(By.ID, "email").get_attribute("value")  # Adjust as needed
+
+    # Test Case TC009: Login Page Security Verification (HTTPS and Encrypted Password)
+    driver.get("https://example.com/login")
+    assert "https" in driver.current_url
+    # Note: Password encryption verification requires backend/network analysis, not feasible with Selenium alone.
+
+    # Test Case TC010: Account Lockout After Multiple Failed Attempts
+    driver.get("https://example.com/login")
+    email_field = driver.find_element(By.ID, "email")
+    password_field = driver.find_element(By.ID, "password")
+    login_button = driver.find_element(By.ID, "loginButton")
+    for _ in range(5):  # Adjust the limit as per the application settings
+        email_field.send_keys("valid_user@example.com")
+        password_field.send_keys("invalid_password")
+        login_button.click()
+        time.sleep(1)  # Add delay if necessary
+    account_lock_message = driver.find_element(By.ID, "lockMessage")  # Adjust selector as needed
+    assert "Account locked" in account_lock_message.text
+
+finally:
+    # Close browser session
+    driver.quit()
