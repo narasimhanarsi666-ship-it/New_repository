@@ -1,0 +1,82 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+
+# Initialize WebDriver
+driver = webdriver.Chrome()
+
+try:
+    # Test Case TC001: Access Login Page from Main Screen
+    # Precondition: User is on the main screen of the application.
+    driver.get("https://example.com")  # Replace with the actual application URL
+    login_button = driver.find_element(By.LINK_TEXT, "Login")  # Adjust locator as needed
+    login_button.click()
+    assert "Login" in driver.title  # Validate navigation to login page
+
+    # Test Case TC002: Login with Valid Credentials
+    # Precondition: User is on the login page and has a registered account with valid credentials.
+    username_field = driver.find_element(By.ID, "username")  # Adjust locator as needed
+    password_field = driver.find_element(By.ID, "password")  # Adjust locator as needed
+    login_button = driver.find_element(By.ID, "loginButton")  # Adjust locator as needed
+
+    username_field.send_keys("valid_user@example.com")  # Replace with valid test credentials
+    password_field.send_keys("valid_password")  # Replace with valid test credentials
+    login_button.click()
+    assert "Dashboard" in driver.title  # Validate redirection to dashboard/home page
+
+    # Test Case TC003: Login Attempt with Invalid Credentials
+    # Precondition: User is on the login page with an account registered in the system.
+    username_field.clear()
+    password_field.clear()
+    username_field.send_keys("invalid_user@example.com")  # Invalid credentials
+    password_field.send_keys("invalid_password")  # Invalid credentials
+    login_button.click()
+    error_message = driver.find_element(By.ID, "errorMessage")  # Adjust locator as needed
+    assert "Invalid username or password" in error_message.text  # Validate error message
+
+    # Test Case TC004: Mandatory Field Validations on Login Page
+    # Precondition: User is on the login page.
+    username_field.clear()
+    password_field.clear()
+    password_field.send_keys("valid_password")  # Leave username empty
+    login_button.click()
+    username_error = driver.find_element(By.ID, "usernameError")  # Adjust locator as needed
+    assert "Username is required" in username_error.text  # Validate username validation message
+
+    username_field.send_keys("valid_user@example.com")  # Enter valid username
+    password_field.clear()  # Leave password empty
+    login_button.click()
+    password_error = driver.find_element(By.ID, "passwordError")  # Adjust locator as needed
+    assert "Password is required" in password_error.text  # Validate password validation message
+
+    # Test Case TC005: Forgot Password Link and 'Remember Me' Functionality
+    # Precondition: User is on the login page.
+    forgot_password_link = driver.find_element(By.LINK_TEXT, "Forgot Password")  # Adjust locator as needed
+    assert forgot_password_link.is_displayed()  # Validate visibility of 'Forgot Password' link
+    forgot_password_link.click()
+    assert "Password Recovery" in driver.title  # Validate navigation to password recovery page
+
+    driver.back()  # Navigate back to login page
+    remember_me_checkbox = driver.find_element(By.ID, "rememberMe")  # Adjust locator as needed
+    remember_me_checkbox.click()
+    username_field.send_keys("valid_user@example.com")  # Replace with valid test credentials
+    password_field.send_keys("valid_password")  # Replace with valid test credentials
+    login_button.click()
+    # Validate session persistence (this would depend on application-specific implementation)
+
+    # Test Case TC006: Account Lockout After Repeated Failed Attempts
+    # Precondition: User is on the login page with an account registered in the system.
+    for attempt in range(5):  # Adjust the number of attempts as per security policy
+        username_field.clear()
+        password_field.clear()
+        username_field.send_keys("invalid_user@example.com")  # Invalid credentials
+        password_field.send_keys("invalid_password")  # Invalid credentials
+        login_button.click()
+
+    lockout_message = driver.find_element(By.ID, "lockoutMessage")  # Adjust locator as needed
+    assert "account is locked" in lockout_message.text  # Validate account lockout message
+
+finally:
+    # Close browser session
+    driver.quit()
