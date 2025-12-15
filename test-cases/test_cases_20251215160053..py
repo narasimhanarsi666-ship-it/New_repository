@@ -1,0 +1,1 @@
+Python Selenium scripts for login functionality testing under Issue Key KAN-1. Ensure Chrome WebDriver is set up for the target browser as Chrome is the recommended browser for Selenium WebDriver due to its extensive support and frequent updates.
