@@ -1,1 +1,0 @@
-Python Selenium scripts for login functionality testing, including accessing the login page, validating input fields, and testing login scenarios with valid and invalid credentials.
