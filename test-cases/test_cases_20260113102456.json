@@ -1,0 +1,74 @@
+{
+  "TestCases": [
+    {
+      "TestCaseID": "TC001",
+      "TestScenario": "Verify successful appointment booking with valid inputs",
+      "Preconditions": "User is logged into the system and has access to the appointment booking feature",
+      "TestSteps": "1. Navigate to the appointment booking page\n2. Select a doctor from the list of available doctors\n3. Choose a preferred date and time\n4. Select the type of consultation (e.g., in-person or virtual)\n5. Confirm the appointment\n6. Check for confirmation notification via email or SMS",
+      "ExpectedResult": "Appointment is successfully booked, and a confirmation notification is sent to the user via email or SMS"
+    },
+    {
+      "TestCaseID": "TC002",
+      "TestScenario": "Verify error message when booking an appointment with an unavailable doctor",
+      "Preconditions": "User is logged into the system and has access to the appointment booking feature",
+      "TestSteps": "1. Navigate to the appointment booking page\n2. Select a doctor who is unavailable\n3. Attempt to choose a date and time\n4. Confirm the appointment",
+      "ExpectedResult": "Error message 'Selected doctor is unavailable for the chosen date and time' is displayed, and the appointment is not booked"
+    },
+    {
+      "TestCaseID": "TC003",
+      "TestScenario": "Verify boundary condition for selecting a date in the past",
+      "Preconditions": "User is logged into the system and has access to the appointment booking feature",
+      "TestSteps": "1. Navigate to the appointment booking page\n2. Select a date in the past\n3. Attempt to confirm the appointment",
+      "ExpectedResult": "Error message 'Cannot book an appointment for a past date' is displayed, and the appointment is not booked"
+    },
+    {
+      "TestCaseID": "TC004",
+      "TestScenario": "Verify security by attempting to book an appointment without logging in",
+      "Preconditions": "User is not logged into the system",
+      "TestSteps": "1. Navigate to the appointment booking page\n2. Attempt to select a doctor, date, and time\n3. Attempt to confirm the appointment",
+      "ExpectedResult": "User is redirected to the login page with a message 'Please log in to book an appointment'"
+    },
+    {
+      "TestCaseID": "TC005",
+      "TestScenario": "Verify integration with email notification system",
+      "Preconditions": "User has successfully booked an appointment",
+      "TestSteps": "1. Confirm the appointment booking\n2. Check the user's email inbox for a confirmation notification",
+      "ExpectedResult": "Confirmation email is received with correct appointment details"
+    },
+    {
+      "TestCaseID": "TC006",
+      "TestScenario": "Verify integration with SMS notification system",
+      "Preconditions": "User has successfully booked an appointment and has a valid phone number registered",
+      "TestSteps": "1. Confirm the appointment booking\n2. Check the user's phone for a confirmation SMS",
+      "ExpectedResult": "Confirmation SMS is received with correct appointment details"
+    },
+    {
+      "TestCaseID": "TC007",
+      "TestScenario": "Verify UI responsiveness on different devices",
+      "Preconditions": "User has access to devices with different screen sizes (e.g., mobile, tablet, desktop)",
+      "TestSteps": "1. Open the appointment booking page on a mobile device\n2. Open the appointment booking page on a tablet\n3. Open the appointment booking page on a desktop\n4. Verify the layout and functionality on each device",
+      "ExpectedResult": "The appointment booking page is responsive and functions correctly on all devices"
+    },
+    {
+      "TestCaseID": "TC008",
+      "TestScenario": "Verify error handling for invalid inputs in appointment booking form",
+      "Preconditions": "User is logged into the system and has access to the appointment booking feature",
+      "TestSteps": "1. Navigate to the appointment booking page\n2. Enter invalid inputs (e.g., invalid date format, empty fields)\n3. Attempt to confirm the appointment",
+      "ExpectedResult": "Appropriate error messages are displayed for each invalid input, and the appointment is not booked"
+    },
+    {
+      "TestCaseID": "TC009",
+      "TestScenario": "Verify permission-based access to appointment booking feature",
+      "Preconditions": "User roles are defined in the system (e.g., patient, admin, guest)",
+      "TestSteps": "1. Log in as a patient and access the appointment booking feature\n2. Log in as an admin and attempt to access the appointment booking feature\n3. Attempt to access the appointment booking feature as a guest without logging in",
+      "ExpectedResult": "Patients can access the appointment booking feature, admins are restricted, and guests are redirected to the login page"
+    },
+    {
+      "TestCaseID": "TC010",
+      "TestScenario": "Verify system behavior under high load during appointment booking",
+      "Preconditions": "System is configured to simulate high user traffic",
+      "TestSteps": "1. Simulate multiple users attempting to book appointments simultaneously\n2. Monitor system performance and response times",
+      "ExpectedResult": "System remains stable, and appointment bookings are processed without significant delays or errors"
+    }
+  ]
+}
